@@ -1,0 +1,46 @@
+/*******************
+* Menu multi-level *
+********************/
+
+.dropdown-submenu {
+    position: relative;
+  }
+
+
+.dropdown-submenu>a:after {
+    content: "\f0da"; /* f054 */
+    float: right;
+    border: none;
+    font-family: 'FontAwesome'; 
+}
+  
+  .dropdown-submenu>.dropdown-menu {
+    top: 0;
+    left: 100%;
+    margin-top: 0px;
+    margin-left: 0px;
+  }
+
+.nopad {
+    padding: 0px;
+}
+
+.top-fixed {
+    border: 1px solid red;
+    position: absolute;
+    top: 0px;
+}
+
+.bottom-fixed {
+    position: fixed;
+    bottom: 0px;
+}
+
+body {
+    color:#F0F0F0;
+    /* background-image:url(/images/template/analyzing-people.jpg); */
+    background: #222222;
+    background: -webkit-linear-gradient(to bottom, #222222, #666666);
+    background: linear-gradient(to bottom, #222222, #666666);
+    min-height: 100vh;
+}

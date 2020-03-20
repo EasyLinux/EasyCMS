@@ -1,0 +1,23 @@
+menuItems:
+  - name: main
+    label: Acceuil
+    type: article
+    default: true
+  - name: technos
+    label: Technologies
+    type: menu
+    menuItems:
+      - name: apercu
+        label: Aperçu de nos avions
+        type: article
+  - name: formation
+    label: Formations
+    type: menu
+    menuItems:
+      - name: aile
+        label: Aile volante
+        type: article
+  - name: about
+    label: A propos de
+    type: article
+
