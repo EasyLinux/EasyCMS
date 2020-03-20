@@ -12,13 +12,15 @@ $(function () {
       setItem("#menu", menuItem);
     }); // foreach
   });
+  // Load main page  
+  $("#content").load("content/main.html");
+
   // Multi Level dropdowns - add from Bootstrap 4 default
   $("ul.dropdown-menu [data-toggle='dropdown']").on("click", function (event) {
     event.preventDefault();
     event.stopPropagation();
 
     $(this).siblings().toggleClass("show");
-
 
     if (!$(this).next().hasClass('show')) {
       $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
@@ -28,8 +30,6 @@ $(function () {
     });
 
   });
-  // Load main page  
-  $("#content").load("content/main.html");
 });
 
 /****************
