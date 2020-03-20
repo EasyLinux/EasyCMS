@@ -1,39 +1,56 @@
 {
-    "menuItems": [
-      {
-        "name": "main",
-        "label": "Acceuil",
-        "type": "article",
-        "default": true
-      },
-      {
-        "name": "technos",
-        "label": "Technologies",
-        "type": "menu",
-        "menuItems": [
-          {
-            "name": "apercu",
-            "label": "Aperçu de nos avions",
-            "type": "article"
-          }
-        ]
-      },
-      {
-        "name": "formation",
-        "label": "Formations",
-        "type": "menu",
-        "menuItems": [
-          {
-            "name": "aile",
-            "label": "Aile volante",
-            "type": "article"
-          }
-        ]
-      },
-      {
-        "name": "about",
-        "label": "A propos de",
-        "type": "article"
-      }
-    ]
-  }
+  "menuItems": [
+    {
+      "name": "main",
+      "label": "Acceuil",
+      "type": "article",
+      "default": true
+    },
+    {
+      "name": "technos",
+      "label": "Technologies",
+      "type": "menu",
+      "menuItems": [
+        {
+          "name": "docker",
+          "label": "Docker",
+          "type": "menu",
+          "menuItems": [
+            {
+              "name": "registry",
+              "label": "Dépôt local",
+              "type": "article"
+            }
+          ]
+        },
+        {
+          "name": "k8s",
+          "label": "Kubernetes",
+          "type": "article"
+        }
+      ]
+    },
+    {
+      "name": "formation",
+      "label": "Formations",
+      "type": "menu",
+      "menuItems": [
+        {
+          "name": "dockform",
+          "label": "Formation Docker",
+          "type": "article"
+        },
+        {
+          "name": "kubform",
+          "label": "Formation Kubernetes",
+          "type": "article"
+        }
+      ]
+    },
+    {
+      "name": "about",
+      "label": "A propos de",
+      "type": "article"
+    }
+  ]
+}

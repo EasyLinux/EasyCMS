@@ -1,77 +1,106 @@
 /* Gobals  */
 var gMenuItem;          // Maintain menu's data
-var menuFirst=true;     // switch 'active' class on first menu item
+var menuFirst = true;     // switch 'active' class on first menu item
 
-$(function(){
-    // Load menu
-    $.get("json/menu.json", function(datas, status){
-        gMenuItem = datas.menuItems;
-        datas.menuItems.forEach(function(menuItem){
-            getItem("#menu",menuItem);
-        }); // foreach
+$(function () {
+  // Load menu from json file
+  $.get("json/menu.json", function (datas, status) {
+    gMenuItem = datas.menuItems; // Store menu for future use
+    console.log(datas.menuItems);
+    datas.menuItems.forEach(function (menuItem) {
+      // Add first levels menuitems
+      setItem("#menu", menuItem);
+    }); // foreach
+  });
+  // Multi Level dropdowns - add from Bootstrap 4 default
+  $("ul.dropdown-menu [data-toggle='dropdown']").on("click", function (event) {
+    event.preventDefault();
+    event.stopPropagation();
+
+    $(this).siblings().toggleClass("show");
+
+
+    if (!$(this).next().hasClass('show')) {
+      $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
+    }
+    $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function (e) {
+      $('.dropdown-submenu .show').removeClass("show");
     });
-    // Multi Level dropdowns
-    $("ul.dropdown-menu [data-toggle='dropdown']").on("click", function(event) {
-        event.preventDefault();
-        event.stopPropagation();
-    
-        $(this).siblings().toggleClass("show");
-    
-    
-        if (!$(this).next().hasClass('show')) {
-          $(this).parents('.dropdown-menu').first().find('.show').removeClass("show");
-        }
-        $(this).parents('li.nav-item.dropdown.show').on('hidden.bs.dropdown', function(e) {
-          $('.dropdown-submenu .show').removeClass("show");
-        });
-    
-      });
-    // Load main page  
-    $("#content").load("content/main.html"); 
+
+  });
+  // Load main page  
+  $("#content").load("content/main.html");
 });
 
 /****************
 * menu creation *
 *****************/
-// First level items
-function getItem(menu,item)
-{
-    if( item.type == "menu")
-      sClass="nav-item dropdown";
-    else
-      sClass="nav-item"
-    if( menuFirst)
-    {
-      sClass += " active";
-      menuFirst=false;
-    }
-    li = "<li class='"+sClass+"'>";
-    if( item.type != "menu")
-    {
-        li += "<a class='nav-link' href='#' onClick=\"doMenu('";
-        li += item.name + "');return false\">"+item.label+"</a></li>";    
-    }
-    else
-    {
-        li +=  "<a class='nav-link dropdown-toggle' href='#' id='";
-        li += "menu-"+item.name+"' data-toggle='dropdown'>";
-        li += item.label + "</a>";
-        li += "<div class='dropdown-menu' aria-labelledby='menu-"+item.name+"'></div>";
-    }
+/**
+ *  setItem(menu, item)
+ * 
+ * fill menu <nav> with firstlevel items
+ *
+ * @param  menu   string    class of current menu
+ * @param  item   object    item to add on menu
+ * @return void
+ */
+function setItem(menu, item) {
+  if (item.type != "menu") {
+    // simple <li> line
+    // <li class="nav-item"><a href="#" class="nav-link" onclick="doMenu();return false;">About</a></li>
+    li = "<li class='nav-item'><a href='#' class='nav-link' ";
+    li += "onclick='doMenu(\"" + item.name + "\");return false;'>" + item.label + "</a></li>";
     $(menu).append(li);
-    if( item.type == "menu")
-    {
-        // <a class="dropdown-item" href="#">Action</a>
-    //     $(menu).append("<ul id='menu-"+item.name+ "'></ul>");
-        // item.menuItems.forEach(function(menuItem){
-            
-    //         getItem('#menu-'+item.name, menuItem);
-        // }); // foreach
-    // }
+  }
+  else {
+    // <li> line plus <ul> sub-menu
+    li = "<li class='nav-item dropdown'>";
+    li += "<a id='menu-" + item.name + "' href='#' data-toggle='dropdown'";
+    li += " aria-haspopup='true' aria-expanded='false' class='nav-link";
+    li += "dropdown-toggle'>" + item.label + "</a>";
+    li += "<ul aria-labelledby='menu-" + item.name + "' id='m-" + item.name + "' ";
+    li += "class='dropdown-menu border-0 shadow'></ul></li>";
+    $(menu).append(li);
+    // Time to call sub-menu items 
+    item.menuItems.forEach(function (menuItem) {
+      setSubMenuItems("#m-" + item.name, menuItem);
+    });   
+  }
 }
 
-function doMenu(id)
-{
-    $("#content").text("Chargement : "+id);
-    $("#content").load("content/"+id+".html");
+/*
+* setSubMenuItems(menu,item)
+*
+* re-entrant function, allows to fill sub-menus
+*
+* @param menu string    menu id name
+* @param item object    menuItem object
+* @return void
+*/
+function setSubMenuItems(menu, item) {
+  if (item.type != "menu") {
+    // simple <li> line
+    // <li> <a class="dropdown-item" href="#" onclick="doMenu();return false;">About</a></li>
+    li =  "<li><a class='dropdown-item' href='#' ";
+    li += "onclick='doMenu(\"" + item.name + "\");return false;'>" + item.label + "</a></li>";
+    $(menu).append(li);
+  }
+  else {
+    li =  "<li class='dropdown-submenu'>";
+    li += "<a id='menu-"+item.name+"' href='#' role='button' ";
+    li += "data-toggle='dropdown' aria-haspopup='true' ";
+    li += "aria-expanded='false' class='dropdown-item dropdown-toggle'>";
+    li += item.label+"</a><ul aria-labelledby='menu-"+item.name+"' ";
+    li += "class='dropdown-menu border-0 shadow' id='m-"+item.name+"'></ul>";
+    $(menu).append(li);
+    // Time to call sub-menu items 
+    item.menuItems.forEach(function (menuItem) {
+      setSubMenuItems("#m-" + item.name, menuItem);
+    });   
+  }
+}
+
+function doMenu(id) {
+  $("#content").text("Chargement : " + id);
+  $("#content").load("content/" + id + ".html");
 }
