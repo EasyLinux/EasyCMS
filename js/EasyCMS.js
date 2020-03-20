@@ -1,6 +1,6 @@
-/* fgfg */
-var gMenuItem;
-var menuFirst=true;
+/* Gobals  */
+var gMenuItem;          // Maintain menu's data
+var menuFirst=true;     // switch 'active' class on first menu item
 
 $(function(){
     // Load menu
@@ -30,6 +30,10 @@ $(function(){
     $("#content").load("content/main.html"); 
 });
 
+/****************
+* menu creation *
+*****************/
+// First level items
 function getItem(menu,item)
 {
     if( item.type == "menu")
