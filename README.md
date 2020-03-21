@@ -18,7 +18,7 @@ This project is in a early stage, so follow the white rabbit ;-)
 
 ## Pourquoi EasyCMS ?
 
-EasyCMS est à la fois une solution et un challenge pour réaliser un CMS vraiment léger. J'utilise Joomla et Wordpress, mais je trouve ces solutions très lourdes en rapport avec mes besoins. Ces solutions sollicites beaucoup le système. 
+EasyCMS est à la fois une solution et un challenge pour réaliser un CMS vraiment léger. J'utilise Joomla et Wordpress, mais je trouve ces solutions très lourdes en rapport avec mes besoins. Ces solutions sollicitent beaucoup le système. 
 Mon utilisation de serveurs web est basée sur la génération de pages utilisées en statique. Dès lors pourquoi utiliser des dizaines de requètes SQL pour générer une page essentiellement statique ?
 
 ## Principes
