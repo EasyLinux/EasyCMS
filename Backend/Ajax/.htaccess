@@ -1,0 +1,3 @@
+RewriteEngine On
+# RewriteCond %{REQUEST_URI} !/index\.php/
+RewriteRule ^Ajax/(.*) /index.php/$1 [L]
