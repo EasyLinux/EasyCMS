@@ -1,6 +1,5 @@
 /* Gobals  */
-var gMenuItem;          // Maintain menu's data
-var menuFirst = true;     // switch 'active' class on first menu item
+var gMenuItem; // Maintain menu's data
 
 /**
  * onReady
@@ -13,20 +12,20 @@ $(function () {
   // Load menu from json file
   $.get("json/menu.json", function (datas, status) {
     gMenuItem = datas.menuItems; // Store menu for future use
-    //$(menu).append("<div id='navbarContent' class='collapse navbar-collapse'></div>");
-    datas.menuItems.forEach(function (menuItem) {
-      // Add first levels menuitems
+    gMenuItem.forEach(function (menuItem) {
       setItem("#menu", menuItem);
-    }); // foreach
+    });
   });
+
   // Load main page  
   $("#content").load("content/main.html");
+
   // Load footer
   $("#footer").load("content/footer.html");
 
   // Allow multi-level menu 
   // TODO see a much proper way than timeOut
-  setTimeout(function(){
+  setTimeout(function () {
     // Multi Level dropdowns - add from Bootstrap 4 default
     // This must be launch after DOM is ready (wait 250ms)
     $("ul.dropdown-menu [data-toggle='dropdown']").on("click", function (event) {
@@ -43,8 +42,8 @@ $(function () {
       });
 
     });
-  },250);
-  
+  }, 250);
+
 });
 
 /****************
@@ -60,27 +59,46 @@ $(function () {
  * @return {void}
  */
 function setItem(menu, item) {
+  var liClass = item.type === "menu" ? "nav-item dropdown" : "nav-item";
+  var menuItem = "<li class='" + liClass + "'>";
 
-  if (item.type != "menu") {
-    // simple <li> line
-    // <li class="nav-item"><a href="#" class="nav-link" onclick="loadContent();return false;">About</a></li>
-    li = "<li class='nav-item'><a href='#' class='nav-link' ";
-    li += "onclick='loadContent(\"" + item.name + "\");return false;'>" + item.label + "</a></li>";
-    $(menu).append(li);
+  var aClass = "nav-link hover";
+  if (item.name === "main") {
+    aClass += " active";
   }
-  else {
-    // <li> line plus <ul> sub-menu
-    li = "<li class='nav-item dropdown'>";
-    li += "<a id='menu-" + item.name + "' href='#' data-toggle='dropdown'";
-    li += " aria-haspopup='true' aria-expanded='false' class='nav-link ";
-    li += "dropdown-toggle'>" + item.label + "</a>";
-    li += "<ul aria-labelledby='menu-" + item.name + "' id='m-" + item.name + "' ";
-    li += "class='dropdown-menu border-0 shadow'></ul></li>";
-    $(menu).append(li);
-    // Time to call sub-menu items 
+  if (item.type === "menu") {
+    aClass += " dropdown-toggle"
+  }
+
+  menuItem += "<a href='#' id='menu-" + item.name + "' class='" + aClass + "'";
+
+  if (item.type === "menu") {
+    var subMenuSpecific = " data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'";
+    menuItem += subMenuSpecific;
+  } else {
+    var linkSpecific = " onclick='loadContent(\"" + item.name + "\");'";
+    menuItem += linkSpecific;
+  }
+
+  menuItem += ">" + item.label;
+  if (item.type === "menu") {
+    menuItem += "<span class='material-icons'>keyboard_arrow_down</span>";
+  }
+  menuItem += "</a>";
+
+  if (item.type === "menu") {
+    menuItem += "<div aria-labelledby='menu-" + item.name + "' id='submenu-" + item.name + "' class='dropdown-menu'></div>";
+  }
+  menuItem += "</li>";
+
+  $(menu).append(menuItem);
+
+  // append sub items
+  if (item.type === "menu") {
+    $("#submenu-" + item.name).append("<ul></ul>");
     item.menuItems.forEach(function (menuItem) {
-      setSubMenuItems("#m-" + item.name, menuItem);
-    });   
+      setSubMenuItems("#submenu-" + item.name + " ul", menuItem);
+    });
   }
 }
 
@@ -93,27 +111,14 @@ function setItem(menu, item) {
 * @param  {object}   item     menuItem object
 * @return {void}
 */
-function setSubMenuItems(menu, item) {
-  if (item.type != "menu") {
-    // simple <li> line
-    // <li> <a class="dropdown-item" href="#" onclick="loadContent();return false;">About</a></li>
-    li =  "<li><a class='dropdown-item' href='#' ";
-    li += "onclick='loadContent(\"" + item.name + "\");return false;'>" + item.label + "</a></li>";
-    $(menu).append(li);
+function setSubMenuItems(submenu, item) {
+  var linkPage = item.name;
+  if (item.type === "menu") {
+    linkPage = item.menuItems[0].name;
   }
-  else {
-    li =  "<li class='dropdown-submenu'>";
-    li += "<a id='menu-"+item.name+"' href='#' role='button' ";
-    li += "data-toggle='dropdown' aria-haspopup='true' ";
-    li += "aria-expanded='false' class='dropdown-item dropdown-toggle'>";
-    li += item.label+"</a><ul aria-labelledby='menu-"+item.name+"' ";
-    li += "class='dropdown-menu border-0 shadow' id='m-"+item.name+"'></ul>";
-    $(menu).append(li);
-    // Time to call sub-menu items 
-    item.menuItems.forEach(function (menuItem) {
-      setSubMenuItems("#m-" + item.name, menuItem);
-    });   
-  }
+  var subMenuItem = "<li><a class='dropdown-item' href='#'";
+  subMenuItem += " onclick='loadContent(\"" + linkPage + "\");'>" + item.label + "</a></li>";
+  $(submenu).append(subMenuItem);
 }
 
 /**
@@ -128,4 +133,19 @@ function setSubMenuItems(menu, item) {
 function loadContent(id) {
   $("#content").text("Chargement : " + id);
   $("#content").load("content/" + id + ".html");
+  setActiveMenu(id);
+}
+
+/**
+ * todo: add active parent menu
+ * Change the active item of a menu
+ * @param {id} id id of new active menu item
+ */
+function setActiveMenu(id) {
+  gMenuItem.forEach(menuItem => {
+    if ($("#menu-" + menuItem.name).hasClass("active")) {
+      $("#menu-" + menuItem.name).removeClass("active");
+    }
+  });
+  $("#menu-" + id).addClass("active");
 }

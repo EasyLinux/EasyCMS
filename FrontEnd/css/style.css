@@ -1,47 +1,135 @@
-/*******************
-* Menu multi-level *
-********************/
-
-.dropdown-submenu {
-    position: relative;
-  }
-
-
-.dropdown-submenu>a:after {
-    content: "\f0da"; /* f054 */
-    float: right;
-    border: none;
-    font-family: 'FontAwesome'; 
-}
-  
-  .dropdown-submenu>.dropdown-menu {
-    top: 0;
-    left: 100%;
-    margin-top: 0px;
-    margin-left: 0px;
-  }
-
-.nopad {
-    padding: 0px;
+/*** BANNER ***/
+.banner-img {
+  width: 100vmax;
+  height: 12rem;
+  object-fit: cover;
+  opacity: .7;
 }
 
-.top-fixed {
-    border: 1px solid red;
-    position: absolute;
-    top: 0px;
+.banner-text-container {
+  position: absolute;
+  top: 3rem;
+  left: 25vmax;
+  border-left: 4px solid #e69500;
+  padding-left: 1.5rem;
 }
 
-.bottom-fixed {
-    width: 100%;
-    position: fixed;
-    bottom: 0px;
+header {
+  background: black;
 }
+
+header h1 {
+  font-size: 3rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  margin: 0;
+}
+
+header p {
+  font-size: 1.1rem;
+}
+
+/*** NAVIGATION ***/
+nav {
+  border-bottom: 1px solid rgba(255, 255, 255, .2);
+  border-top: 1px solid rgba(255, 255, 255, .2);
+  background: #2f2f2f;
+  width: 100vmax;
+}
+
+nav ul.navbar-nav {
+  justify-content: space-around;
+  width: 40vmax;
+  margin: auto;
+  padding: .5rem 0;
+}
+
+nav.navbar-dark .navbar-nav .nav-link {
+  color: rgba(255, 255, 255, .7);
+  padding: 0 .2rem;
+}
+
+.dropdown-menu {
+  background: #2f2f2f;
+  border-color: rgba(255, 255, 255, .2);
+}
+
+.dropdown-menu .dropdown-item {
+  color: rgba(255, 255, 255, .7);
+}
+
+.dropdown-item:focus, .dropdown-item:hover {
+  background: none;
+  text-decoration: underline;
+}
+
+.nav-item ul {
+  list-style: none;
+  padding: 0;
+}
+
+.nav-item .hover {
+  transition: all 0.1s ease-in-out;
+  position: relative;
+}
+.nav-item .hover:before, .nav-item .hover:after {
+  content: "";
+  position: absolute;
+  bottom: -5px;
+  width: 0px;
+  height: 2px;
+  margin: 2px 0 0;
+  transition: all 0.1s ease-in-out;
+  transition-duration: 0.5s;
+  opacity: 0;
+  background-color: #e69500;
+  right: 50%;
+  border: none;
+}
+
+.nav-item .hover:before {
+  left: 50%;
+}
+.nav-item:hover .hover:before, .nav-item:hover .hover:after,
+.nav-item .hover.active:before, .nav-item .hover.active:after {
+  width: 50%;
+  opacity: 1;
+}
+
+/*** GLOBAL ***/
 
 body {
     color:#F0F0F0;
-    /* background-image:url(/images/template/analyzing-people.jpg); */
-    background: #222222;
-    background: -webkit-linear-gradient(to bottom, #222222, #666666);
-    background: linear-gradient(to bottom, #222222, #666666);
-    min-height: 100vh;
+    background: #2f2f2f;
+}
+
+main {
+  font-family: 'Roboto', sans-serif;
+  margin-top: 3rem;
+}
+
+main h2 {
+  font-size: 2.5rem;
+  margin-bottom: 2rem;
+  border-bottom: 1px solid #e69500;
+}
+
+ a,  a:hover,  a:active,  a:visited,  a:focus {
+  color: #e69500;
+}
+
+.material-icons {
+  vertical-align: middle;
+}
+
+/*** FOOTER ***/
+footer {
+  border-top: 1px solid rgba(255, 255, 255, .2);
+  margin-top: 4rem;
+  padding: 1rem 5rem;
+}
+
+#footer {
+  display: flex;
+  justify-content: space-around;
 }

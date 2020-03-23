@@ -2,7 +2,7 @@
   "menuItems": [
     {
       "name": "main",
-      "label": "Acceuil",
+      "label": "Accueil",
       "type": "article",
       "default": true
     },
