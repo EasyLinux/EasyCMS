@@ -20,6 +20,11 @@
               "name": "registry",
               "label": "Dépôt local",
               "type": "article"
+            },
+            {
+              "name": "test",
+              "label": "Test",
+              "type": "article"
             }
           ]
         },

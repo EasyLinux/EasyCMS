@@ -41,24 +41,31 @@
         </div>
     </header>
 
-    <!-- fill on init by EasyCMS-->
+    <!-- filled on init by EasyCMS-->
     <nav role="navigation" class="navbar navbar-expand navbar-dark sticky-top">
         <ul class="navbar-nav hover" id="menu">
         </ul>
     </nav>
 
-    <main role="main" class="container">
+    <main role="main" class="container-fluid">
+        <div class="row">
+            <nav role="navigation" class="secondary-menu col-3">
+                <ul id="secondary-menu" class="hide"></ul>
+            </nav>
 
-        <div id="content">
+            <div id="content" class="col">
+            </div>
+
+            <div class="col-3"></div>
         </div>
 
-        <div class="row">
-            <div class="col-md-12">
-                <!-- TODO: modif-->
-                <h3>Visites</h3>
-                <span id='visits'></span> Visiteurs
+        <!-- <div class="row">
+            <div class="col-md-12"> -->
+        <!-- TODO: modif-->
+        <!-- <h3>Visites</h3>
+                <span id='visits'></span> Visiteurs -->
 
-                <!-- <div id="jts_counter" class="counter">
+        <!-- <div id="jts_counter" class="counter">
             <a href="http://www.joomlatutos.com" target="_blank">
               <img id="jts_counter_img" 
                    src="/modules/mod_jts_counterstats/tmpl/images/logo.png" 
@@ -71,10 +78,9 @@
                     <img src="http://rc.net6a.com/modules/mod_jts_counterstats/tmpl/images/style_11/8.png" alt="mod_jts_counterstats" title="Compteur de visites"/></div>
                     <div id="jts_counter_digit" style="margin-right:1px;">
                     <img src="http://rc.net6a.com/modules/mod_jts_counterstats/tmpl/images/style_11/0.png" alt="mod_jts_counterstats" title="Compteur de visites"/></div><div id="jts_counter_digit" style="margin-right:1px;"><img src="http://rc.net6a.com/modules/mod_jts_counterstats/tmpl/images/style_11/4.png" alt="mod_jts_counterstats" title="Compteur de visites"/></div><div id="jts_counter_digit" style="margin-right:1px;"><img src="http://rc.net6a.com/modules/mod_jts_counterstats/tmpl/images/style_11/2.png" alt="mod_jts_counterstats" title="Compteur de visites"/></div><div id="jts_counter_digit" style="margin-right:1px;"><img src="http://rc.net6a.com/modules/mod_jts_counterstats/tmpl/images/style_11/1.png" alt="mod_jts_counterstats" title="Compteur de visites"/></div></div><div class="jts_counter_hr" style="border-top:1px dotted #bbbbbb;"></div><table border="0" cellpadding="0" cellspacing="0" style="margin-bottom:3px"><tr valign="top" border="0"><table border="0" cellpadding="0" cellspacing="0"><tr valign="top"><td><div id="jts_counter_indent">-</div></td><td><div id="jts_counter_guests">1 invité</div></td></tr></table></td></tr></table></div>		</div> -->
+        <!-- </div> -->
 
-            </div>
-
-        </div>
+        <!-- </div> -->
     </main>
 
     <footer class="container-fluid">

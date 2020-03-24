@@ -54,80 +54,106 @@ $(function () {
  * 
  * fill menu <nav> with firstlevel items
  *
- * @param  {string}  menu       class of current menu
- * @param  {object}  item       item to add on menu
+ * @param  {string}  menu id of the HTML menu element
+ * @param  {object}  item item to add on menu
  * @return {void}
  */
 function setItem(menu, item) {
-  var liClass = item.type === "menu" ? "nav-item dropdown" : "nav-item";
-  var menuItem = "<li class='" + liClass + "'>";
+  var isMenu = item.type === "menu";
 
-  var aClass = "nav-link hover";
-  if (item.name === "main") {
-    aClass += " active";
-  }
-  if (item.type === "menu") {
-    aClass += " dropdown-toggle"
-  }
+  var liElement = document.createElement("li");
+  liElement.classList.add("nav-item");
 
-  menuItem += "<a href='#' id='menu-" + item.name + "' class='" + aClass + "'";
+  var aElement = document.createElement("a");
+  aElement.classList.add("nav-link");
+  aElement.classList.add("hover");
+  aElement.setAttribute("href", "#");
+  aElement.setAttribute("id", "menu-" + item.name);
+  aElement.textContent = item.label;
 
-  if (item.type === "menu") {
-    var subMenuSpecific = " data-toggle='dropdown' aria-haspopup='true' aria-expanded='false'";
-    menuItem += subMenuSpecific;
-  } else {
-    var linkSpecific = " onclick='loadContent(\"" + item.name + "\");'";
-    menuItem += linkSpecific;
-  }
+  if (isMenu) {
+    liElement.classList.add("dropdown");
+    aElement.classList.add("dropdown-toggle");
+    aElement.setAttribute("data-toggle", "dropdown");
+    aElement.setAttribute("aria-haspopup", "true");
+    aElement.setAttribute("aria-expanded", "false");
 
-  menuItem += ">" + item.label;
-  if (item.type === "menu") {
-    menuItem += "<span class='material-icons'>keyboard_arrow_down</span>";
-  }
-  menuItem += "</a>";
+    var spanElement = document.createElement("span");
+    spanElement.classList.add("material-icons");
+    spanElement.textContent = "keyboard_arrow_down";
 
-  if (item.type === "menu") {
-    menuItem += "<div aria-labelledby='menu-" + item.name + "' id='submenu-" + item.name + "' class='dropdown-menu'></div>";
-  }
-  menuItem += "</li>";
+    var divElement = document.createElement("div");
+    divElement.classList.add("dropdown-menu");
+    divElement.setAttribute("aria-labelledby", "menu-" + item.name);
+    divElement.setAttribute("id", "submenu-" + item.name);
 
-  $(menu).append(menuItem);
-
-  // append sub items
-  if (item.type === "menu") {
-    $("#submenu-" + item.name).append("<ul></ul>");
-    item.menuItems.forEach(function (menuItem) {
-      setSubMenuItems("#submenu-" + item.name + " ul", menuItem);
+    var ulElement = document.createElement("ul");
+    item.menuItems.forEach(subMenuItem => {
+      ulElement.appendChild(setSubMenuItems(subMenuItem));
     });
+
+    divElement.appendChild(ulElement);
+    aElement.appendChild(spanElement);
+    aElement.appendChild(divElement);
+
+  } else {
+    aElement.addEventListener("click", function () { loadContent(item.name) }, false);
   }
+
+  if (item.name === "main") {
+    aElement.classList.add("active");
+  }
+
+  liElement.appendChild(aElement);
+  $(menu).append(liElement);
 }
 
-/*
+/**
 * setSubMenuItems(menu,item)
 *
 * re-entrant function, allows to fill sub-menus
 *
-* @param  {string}   menu     menu id name
 * @param  {object}   item     menuItem object
-* @return {void}
+* @return {HTMLElement} List submenu element 
 */
-function setSubMenuItems(submenu, item) {
+function setSubMenuItems(item) {
   var linkPage = item.name;
   if (item.type === "menu") {
     linkPage = item.menuItems[0].name;
   }
-  var subMenuItem = "<li><a class='dropdown-item' href='#'";
-  subMenuItem += " onclick='loadContent(\"" + linkPage + "\");'>" + item.label + "</a></li>";
-  $(submenu).append(subMenuItem);
+  var liElement = document.createElement("li");
+  var aElement = document.createElement("a");
+  aElement.classList.add("dropdown-item");
+  aElement.setAttribute("href", "#");
+  aElement.addEventListener("click", function () { loadContent(linkPage) }, false);
+  aElement.textContent = item.label;
+
+  liElement.appendChild(aElement);
+  return liElement;
+}
+
+function setSecondaryMenu(itemList) {
+  $("#secondary-menu").empty();
+  itemList.forEach(menuItem => {
+    var liElement = document.createElement("li");
+    var aElement = document.createElement("a");
+    aElement.setAttribute("href", "#");
+    aElement.addEventListener("click", function () { loadContent(menuItem.name) }, false);
+    aElement.textContent = menuItem.label;
+    liElement.appendChild(aElement);
+
+    $("#secondary-menu").append(liElement);
+  });
+
 }
 
 /**
  * loadContent
  * 
- * this function loads content in content folder in the <div> identified by
+ * Loads content in content folder in the <div> identified by
  * contend id
  *  
- * @param {text} id   name of file to be loaded
+ * @param {text} id name of file to be loaded
  * @return void
  */
 function loadContent(id) {
@@ -136,10 +162,11 @@ function loadContent(id) {
   setActiveMenu(id);
 }
 
+
 /**
- * todo: add active parent menu
  * Change the active item of a menu
- * @param {id} id id of new active menu item
+ * @param {string} id id of the new active menu item
+ * @return void
  */
 function setActiveMenu(id) {
   gMenuItem.forEach(menuItem => {
@@ -147,5 +174,51 @@ function setActiveMenu(id) {
       $("#menu-" + menuItem.name).removeClass("active");
     }
   });
-  $("#menu-" + id).addClass("active");
+
+  var activeMenuItem = findInMenu(id, gMenuItem);
+  $("#menu-" + activeMenuItem.name).addClass("active");
+}
+
+
+/**
+ * Find an item in a hierarchical menu
+ * @param {string} itemName Name of the item to find
+ * @param {Array} menu Menu in which to search the item
+ * @return {JSON} Item found in the menu tree with the corresponding name
+ */
+function findInMenu(itemName, menu) {
+  // try to find the item in the menu (depth 1)
+  var d1Match = menu.find(d1Item => d1Item.name === itemName);
+
+  if (d1Match) {
+    $("#secondary-menu").addClass("hide");
+    return d1Match;
+
+  } else {
+    // for all depth 1 nodes
+    for (var d1Index = 0, d1Length = menu.length; d1Index < d1Length; d1Index++) {
+      var d1Item = menu[d1Index];
+      if (d1Item.type === "menu") {
+        var d2Match = d1Item.menuItems.find(d2Item => d2Item.name === itemName);
+        if (d2Match) {
+          $("#secondary-menu").addClass("hide");
+          return d1Item;
+
+        } else {
+          // for all depth 2 nodes
+          for (var d2Index = 0, d2Length = d1Item.menuItems.length; d2Index < d2Length; d2Index++) {
+            var d2Item = d1Item.menuItems[d2Index];
+            if (d2Item.type === "menu") {
+              var d3Match = d2Item.menuItems.find(d3Item => d3Item.name === itemName);
+              if (d3Match) {
+                setSecondaryMenu(d2Item.menuItems);
+                $("#secondary-menu").removeClass("hide");
+                return d1Item;
+              }
+            }
+          }
+        }
+      }
+    }
+  }
 }

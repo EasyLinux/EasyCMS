@@ -30,21 +30,21 @@ header p {
 }
 
 /*** NAVIGATION ***/
-nav {
+.navbar {
   border-bottom: 1px solid rgba(255, 255, 255, .2);
   border-top: 1px solid rgba(255, 255, 255, .2);
   background: #2f2f2f;
   width: 100vmax;
 }
 
-nav ul.navbar-nav {
+.navbar ul.navbar-nav {
   justify-content: space-around;
   width: 40vmax;
   margin: auto;
   padding: .5rem 0;
 }
 
-nav.navbar-dark .navbar-nav .nav-link {
+.navbar.navbar-dark .navbar-nav .nav-link {
   color: rgba(255, 255, 255, .7);
   padding: 0 .2rem;
 }
@@ -96,8 +96,16 @@ nav.navbar-dark .navbar-nav .nav-link {
   opacity: 1;
 }
 
-/*** GLOBAL ***/
+/*** SECONDARY MENU ***/
+#secondary-menu {
+  list-style: none;
+  padding: 2rem 3rem;
+  line-height: 2.2rem;
+  border-right: 1px solid rgba(255,255,255,.2);
+  text-align: right;
+}
 
+/*** GLOBAL ***/
 body {
     color:#F0F0F0;
     background: #2f2f2f;
@@ -120,6 +128,10 @@ main h2 {
 
 .material-icons {
   vertical-align: middle;
+}
+
+.hide {
+  visibility: hidden;
 }
 
 /*** FOOTER ***/
