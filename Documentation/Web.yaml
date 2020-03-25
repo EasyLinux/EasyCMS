@@ -1,0 +1,91 @@
+version: '3'
+
+services:
+
+  www:
+    # Web server - front end
+    image: easylinux/nginx:3.11
+    volumes:
+      - /Data/Docker/Apps/Rc/www/FrontEnd:/var/www
+    networks:
+      - extBackend
+      - default
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=Backend
+        - traefik.http.services.www.loadbalancer.server.port=80
+        - traefik.http.routers.www.rule=Host(`www.easylinux.lan`)
+
+  editor:
+    # temporary - editor
+    image: easylinux/apache:7.3.15.2
+    volumes:
+      - /Data/Docker/Apps/Rc/Editor:/var/www/html
+    ports:
+      - 8115:80
+    networks:
+      - extBackend
+      - default
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=Backend
+        - traefik.http.services.editor.loadbalancer.server.port=80
+        - traefik.http.routers.editor.rule=Host(`editor.easylinux.lan`)
+
+  backend:
+    # backend server
+    image: easylinux/apache:7.3.15.2
+    depends_on:
+      - RcDb
+    volumes:
+      - /Data/Docker/Apps/Rc/www/Backend:/var/www/html
+    networks:
+      - extBackend
+      - default
+    deploy:
+      labels:
+        # Traefik autorisé, réseau Backend, port du conteneur 80
+        - traefik.enable=true
+        - traefik.docker.network=Backend
+        - traefik.http.services.backend.loadbalancer.server.port=80
+        # Entrée via http -> redirection sur https
+        - traefik.http.routers.backend.rule=Host(`backend.easylinux.lan`)
+        - traefik.http.middlewares.backend-https.redirectscheme.scheme=https
+        - traefik.http.middlewares.backend-https.redirectscheme.port=443
+        - traefik.http.routers.backend.middlewares=backend-https@docker
+        # Entrée via https
+        - traefik.http.routers.backend-secure.entrypoints=https
+        - traefik.http.routers.backend-secure.rule=Host(`backend.easylinux.lan`)
+        - traefik.http.routers.backend-secure.tls=true
+        - traefik.http.routers.backend.service=backend@docker
+
+  rest:
+    # rest server
+    image: easylinux/apache:7.3.15.2
+    depends_on:
+      - RcDb
+    volumes:
+      - /Data/Docker/Apps/Rc/www/Backend/Ajax:/var/www/html
+    networks:
+      - extBackend
+      - default
+    deploy:
+      labels:
+        - traefik.enable=true
+        - traefik.docker.network=Backend
+        - traefik.http.services.rest.loadbalancer.server.port=80
+        - "traefik.http.routers.rest.rule=Host(`backend.easylinux.lan`) && PathPrefix(`/Ajax`)"
+        # Entrée via https
+        - traefik.http.routers.rest-secure.entrypoints=https
+        - traefik.http.routers.rest-secure.rule=Host(`backend.easylinux.lan`)
+        - traefik.http.routers.rest-secure.tls=true
+        - traefik.http.routers.rest.service=rest@docker
+
+
+networks:
+  extBackend:
+    external:
+      name: Backend
+
