@@ -14,6 +14,9 @@ menuItems:
           - name: registry 
             label: Dépôt local
             type: article
+          - name: test
+            label: Test
+            type: article
       - name: k8s
         label: Kubernetes
         type: article
