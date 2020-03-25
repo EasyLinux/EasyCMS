@@ -114,6 +114,7 @@ body {
 main {
   font-family: 'Roboto', sans-serif;
   margin-top: 3rem;
+  margin-bottom: 7rem;
 }
 
 main h2 {
@@ -137,11 +138,17 @@ main h2 {
 /*** FOOTER ***/
 footer {
   border-top: 1px solid rgba(255, 255, 255, .2);
-  margin-top: 4rem;
   padding: 1rem 5rem;
+  position: fixed;
+  bottom: 0;
+  background: #2f2f2f;
 }
 
 #footer {
   display: flex;
   justify-content: space-around;
+}
+
+footer p {
+  margin: 0;
 }
