@@ -134,6 +134,18 @@ main h2 {
   visibility: hidden;
 }
 
+/*** PAGINATION ***/
+.page-link, .page-link:active, .page-link:visited, .page-link:hover, .page-link:focus {
+  border-color:rgba(230, 149, 0, .5);
+  color: #e69500;
+  background: none;
+}
+
+.page-link:hover, .page-link:focus {
+  background: rgba(0,0,0,.3);
+}
+
+
 /*** FOOTER ***/
 footer {
   border-top: 1px solid rgba(255, 255, 255, .2);
